@@ -1,0 +1,33 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environments
+.env
+
+# Database
+database/*.db
+database/*.sqlite
+database/*.sqlite3
+
+# dbt
+dbt_project/target/
+dbt_project/dbt_packages/
+dbt_project/logs/
+
+# Streamlit
+.streamlit/
+
+# Agent directory / temp
+.gemini/
+scripts/output.txt
+scripts/dates_output.txt
+scripts/dates_output2.txt
+scripts/tables_output2.txt
+
+# OS generated files
+.DS_Store
+Thumbs.db

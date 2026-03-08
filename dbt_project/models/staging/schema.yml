@@ -1,0 +1,13 @@
+version: 2
+
+models:
+  - name: stg_merchants
+    description: "Standardized merchant data"
+  - name: stg_transactions
+    description: "Standardized transactions"
+  - name: stg_installments
+    description: "Standardized installments"
+  - name: stg_payments
+    description: "Standardized payments"
+  - name: stg_settlements
+    description: "Standardized settlements"

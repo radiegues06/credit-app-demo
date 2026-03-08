@@ -1,0 +1,9 @@
+version: 2
+
+models:
+  - name: fct_credit_transactions
+    description: "Fact table for credit transactions enriched with merchant info"
+  - name: fct_installments
+    description: "Fact table for installments with calculated delinquency metrics"
+  - name: fct_payments
+    description: "Fact table for payments detailing partial payments and timing"

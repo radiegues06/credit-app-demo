@@ -1,0 +1,11 @@
+version: 2
+
+models:
+  - name: portfolio_metrics
+    description: "Analytics table for overarching portfolio health and size metrics"
+  - name: reconciliation_metrics
+    description: "Analytics table tracking payment reconciliation against bank settlements"
+  - name: collection_metrics
+    description: "Analytics table comparing expected installment collection to actual collection"
+  - name: vintage_default_metrics
+    description: "Analytics table observing default rates by origination cohort (vintage)"
