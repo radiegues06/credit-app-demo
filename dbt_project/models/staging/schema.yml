@@ -2,12 +2,148 @@ version: 2
 
 models:
   - name: stg_merchants
-    description: "Standardized merchant data"
+    description: "Standardized merchant data. Represents the businesses where transactions occur."
+    columns:
+      - name: merchant_id
+        description: "Unique identifier for the merchant."
+        tests:
+          - unique
+          - not_null
+      - name: merchant_name
+        description: "Name of the merchant."
+        tests:
+          - not_null
+      - name: segment
+        description: "Retail segment of the merchant."
+        tests:
+          - not_null
+      - name: city
+        description: "City where the merchant is located."
+
   - name: stg_transactions
-    description: "Standardized transactions"
+    description: "Standardized transactions. Represents credit purchases made by customers."
+    columns:
+      - name: transaction_id
+        description: "Unique identifier for the transaction."
+        tests:
+          - unique
+          - not_null
+      - name: merchant_id
+        description: "Identifier of the merchant where the transaction occurred."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_merchants')
+              field: merchant_id
+      - name: customer_id
+        description: "Identifier of the customer making the purchase."
+        tests:
+          - not_null
+      - name: purchase_value
+        description: "Total value of the purchase."
+        tests:
+          - not_null
+      - name: installments
+        description: "Number of installments for the purchase."
+        tests:
+          - not_null
+          - accepted_values:
+              values: [1, 2, 3, 6, 10, 12]
+      - name: transaction_date
+        description: "Date and time the transaction occurred."
+        tests:
+          - not_null
+
   - name: stg_installments
-    description: "Standardized installments"
+    description: "Standardized installments. Represents the split payments for a transaction."
+    columns:
+      - name: installment_id
+        description: "Unique identifier for the installment."
+        tests:
+          - unique
+          - not_null
+      - name: transaction_id
+        description: "Identifier of the associated transaction."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_transactions')
+              field: transaction_id
+      - name: installment_number
+        description: "The sequence number of the installment (1 to N)."
+        tests:
+          - not_null
+      - name: due_date
+        description: "The date the installment is due."
+        tests:
+          - not_null
+      - name: principal
+        description: "The principal amount due."
+        tests:
+          - not_null
+      - name: interest
+        description: "The interest amount due."
+        tests:
+          - not_null
+      - name: status
+        description: "Current status of the installment."
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['paid', 'late', 'default', 'pending']
+
   - name: stg_payments
-    description: "Standardized payments"
+    description: "Standardized payments. Represents actual payments made by customers."
+    columns:
+      - name: payment_id
+        description: "Unique identifier for the payment."
+        tests:
+          - unique
+          - not_null
+      - name: installment_id
+        description: "Identifier of the installment being paid."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_installments')
+              field: installment_id
+      - name: payment_date
+        description: "Date and time the payment was made."
+        tests:
+          - not_null
+      - name: amount
+        description: "The total amount paid."
+        tests:
+          - not_null
+      - name: payment_channel
+        description: "The channel used for payment."
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['pix', 'boleto', 'credit_card']
+
   - name: stg_settlements
-    description: "Standardized settlements"
+    description: "Standardized settlements. Represents bank confirmations of payments."
+    columns:
+      - name: settlement_id
+        description: "Unique identifier for the settlement."
+        tests:
+          - unique
+          - not_null
+      - name: payment_id
+        description: "Identifier of the payment that was settled."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('stg_payments')
+              field: payment_id
+      - name: settlement_date
+        description: "Date and time the bank settled the payment."
+        tests:
+          - not_null
+      - name: amount
+        description: "The amount settled by the bank."
+        tests:
+          - not_null
+      - name: bank_reference
+        description: "Bank's reference string."

@@ -2,10 +2,84 @@ version: 2
 
 models:
   - name: portfolio_metrics
-    description: "Analytics table for overarching portfolio health and size metrics"
+    description: "Analytics table for overarching portfolio health and size metrics. Usually contains a single row with overall totals."
+    columns:
+      - name: total_financed_value
+        description: "Total historical financed value for the entire portfolio."
+        tests:
+          - not_null
+      - name: outstanding_principal
+        description: "Total principal amount that is currently unpaid (pending, late, or default)."
+        tests:
+          - not_null
+      - name: average_ticket
+        description: "Average purchase value across all transactions."
+      - name: par30
+        description: "Portfolio at Risk > 30 Days (PAR30). Ratio of unpaid principal past 30 days due vs total outstanding principal."
+        tests:
+          - not_null
+      - name: par90
+        description: "Portfolio at Risk > 90 Days (PAR90). Ratio of unpaid principal past 90 days due vs total outstanding principal."
+        tests:
+          - not_null
+
   - name: reconciliation_metrics
-    description: "Analytics table tracking payment reconciliation against bank settlements"
+    description: "Analytics table tracking payment reconciliation against bank settlements."
+    columns:
+      - name: expected_cash
+        description: "Total amount recorded from all customer payments."
+        tests:
+          - not_null
+      - name: settled_cash
+        description: "Total amount successfully settled by the banks."
+        tests:
+          - not_null
+      - name: difference
+        description: "Mathematical difference between expected cash and settled cash."
+        tests:
+          - not_null
+      - name: reconciliation_rate
+        description: "Ratio of reconciled (settled) payments to total recorded payments."
+        tests:
+          - not_null
+      - name: unmatched_payments
+        description: "Count of payments that do not have a corresponding settlement."
+        tests:
+          - not_null
+
   - name: collection_metrics
-    description: "Analytics table comparing expected installment collection to actual collection"
+    description: "Analytics table comparing expected installment collection to actual collection."
+    columns:
+      - name: expected_collection
+        description: "Total amount expected from installments due on or before today."
+        tests:
+          - not_null
+      - name: actual_collection
+        description: "Total amount actually received from all payments."
+        tests:
+          - not_null
+      - name: collection_rate
+        description: "Ratio of actual collection to expected collection."
+        tests:
+          - not_null
+
   - name: vintage_default_metrics
-    description: "Analytics table observing default rates by origination cohort (vintage)"
+    description: "Analytics table observing default rates by origination cohort (vintage)."
+    columns:
+      - name: origination_month
+        description: "The vintage month (YYYY-MM)."
+        tests:
+          - unique
+          - not_null
+      - name: total_financed
+        description: "Total financed amount for this vintage."
+        tests:
+          - not_null
+      - name: defaulted_amount
+        description: "Total principal amount currently in default for this vintage."
+        tests:
+          - not_null
+      - name: default_rate
+        description: "Ratio of defaulted amount to total financed amount for this vintage."
+        tests:
+          - not_null

@@ -2,8 +2,108 @@ version: 2
 
 models:
   - name: fct_credit_transactions
-    description: "Fact table for credit transactions enriched with merchant info"
+    description: "Fact table for credit transactions enriched with merchant info. Contains one row per transaction."
+    columns:
+      - name: transaction_id
+        description: "Unique transaction identifier."
+        tests:
+          - unique
+          - not_null
+      - name: merchant_id
+        description: "Merchant identifier."
+        tests:
+          - not_null
+      - name: merchant_name
+        description: "Name of the merchant."
+      - name: segment
+        description: "Retail segment of the merchant."
+      - name: city
+        description: "City where the merchant is located."
+      - name: customer_id
+        description: "Customer identifier."
+      - name: purchase_value
+        description: "Total purchase value."
+        tests:
+          - not_null
+      - name: installments
+        description: "Number of installments."
+      - name: transaction_date
+        description: "Date and time of the transaction."
+      - name: origination_month
+        description: "The Month-Year (YYYY-MM) the transaction occurred, useful for vintage analysis."
+        tests:
+          - not_null
+
   - name: fct_installments
-    description: "Fact table for installments with calculated delinquency metrics"
+    description: "Fact table for installments with calculated delinquency metrics. One row per installment."
+    columns:
+      - name: installment_id
+        description: "Unique installment identifier."
+        tests:
+          - unique
+          - not_null
+      - name: transaction_id
+        description: "Associated transaction identifier."
+        tests:
+          - not_null
+      - name: installment_number
+        description: "Sequence number of the installment."
+      - name: due_date
+        description: "The date the installment is due."
+      - name: principal
+        description: "Principal amount."
+      - name: interest
+        description: "Interest amount."
+      - name: expected_amount
+        description: "Total expected amount (principal + interest)."
+        tests:
+          - not_null
+      - name: status
+        description: "Current status of the installment."
+        tests:
+          - not_null
+      - name: days_past_due
+        description: "Number of days the installment is past its due date. 0 if it is not late."
+        tests:
+          - not_null
+      - name: delinquency_bucket
+        description: "Bucket categorized by days past due (e.g., current, 0-30, 31-60, 61-90, 90+)."
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['paid', 'current', '0-30', '31-60', '61-90', '90+']
+
   - name: fct_payments
-    description: "Fact table for payments detailing partial payments and timing"
+    description: "Fact table for payments detailing partial payments and timing. Enriched with original expected amount."
+    columns:
+      - name: payment_id
+        description: "Unique payment identifier."
+        tests:
+          - unique
+          - not_null
+      - name: installment_id
+        description: "Associated installment identifier."
+        tests:
+          - not_null
+      - name: transaction_id
+        description: "Associated transaction identifier."
+        tests:
+          - not_null
+      - name: payment_date
+        description: "Date the payment was made."
+      - name: amount
+        description: "Actual amount paid."
+        tests:
+          - not_null
+      - name: payment_channel
+        description: "Channel used for payment."
+      - name: expected_amount
+        description: "The amount that was expected for this installment."
+      - name: installment_principal
+        description: "The principal part of the installment."
+      - name: installment_interest
+        description: "The interest part of the installment."
+      - name: is_partial
+        description: "Boolean indicating if the payment was partial (less than expected by a significant margin)."
+        tests:
+          - not_null
