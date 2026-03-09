@@ -21,6 +21,16 @@ models:
         description: "City where the merchant is located."
       - name: customer_id
         description: "Customer identifier."
+      - name: client_name
+        description: "Full name of the client."
+      - name: client_job
+        description: "Client's job."
+      - name: client_income
+        description: "Client's income."
+      - name: client_credit_risk
+        description: "Credit risk class of the client."
+      - name: client_classification
+        description: "Client's tier."
       - name: purchase_value
         description: "Total purchase value."
         tests:

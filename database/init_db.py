@@ -10,13 +10,17 @@ from data_generator.transactions import generate_transactions
 from data_generator.installments import generate_installments
 from data_generator.payments import generate_payments
 from data_generator.settlements import generate_settlements
+from data_generator.clients import generate_clients
 
 def init_db():
     print("Generating synthetic data...")
     merchants_df = generate_merchants()
     merchant_ids = merchants_df["merchant_id"].tolist()
     
-    transactions_df = generate_transactions(merchant_ids=merchant_ids)
+    clients_df = generate_clients()
+    client_ids = clients_df["client_id"].tolist()
+    
+    transactions_df = generate_transactions(merchant_ids=merchant_ids, client_ids=client_ids)
     installments_df = generate_installments(transactions_df)
     payments_df = generate_payments(installments_df)
     settlements_df = generate_settlements(payments_df)
@@ -32,6 +36,7 @@ def init_db():
     # Save raw tables
     print("Loading data into raw SQLite tables...")
     merchants_df.to_sql("raw_merchants", conn, if_exists="replace", index=False)
+    clients_df.to_sql("raw_clients", conn, if_exists="replace", index=False)
     transactions_df.to_sql("raw_transactions", conn, if_exists="replace", index=False)
     installments_df.to_sql("raw_installments", conn, if_exists="replace", index=False)
     payments_df.to_sql("raw_payments", conn, if_exists="replace", index=False)
@@ -41,6 +46,7 @@ def init_db():
     
     print(f"Database setup complete.")
     print(f"Merchants: {len(merchants_df)}")
+    print(f"Clients: {len(clients_df)}")
     print(f"Transactions: {len(transactions_df)}")
     print(f"Installments: {len(installments_df)}")
     print(f"Payments: {len(payments_df)}")

@@ -63,6 +63,24 @@ models:
         tests:
           - not_null
 
+  - name: client_risk_metrics
+    description: "Analytics table observing metrics like total and defaulted amount based on credit risk tier."
+    columns:
+      - name: client_credit_risk
+        description: "The credit risk class of the clients."
+        tests:
+          - not_null
+      - name: total_clients
+        description: "Total distinct clients within this credit risk tier."
+      - name: total_transactions
+        description: "Total transactions across this credit risk tier."
+      - name: total_financed
+        description: "Total financed value."
+      - name: defaulted_amount
+        description: "Total amount in default."
+      - name: default_rate
+        description: "Default rate ratio (defaulted_amount / total_financed)."
+
   - name: vintage_default_metrics
     description: "Analytics table observing default rates by origination cohort (vintage)."
     columns:

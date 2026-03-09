@@ -6,6 +6,7 @@ sources:
     schema: main
     tables:
       - name: raw_merchants
+      - name: raw_clients
       - name: raw_transactions
       - name: raw_installments
       - name: raw_payments
