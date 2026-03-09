@@ -81,6 +81,25 @@ models:
       - name: default_rate
         description: "Default rate ratio (defaulted_amount / total_financed)."
 
+  - name: mart_reconciliation_detail
+    description: "Detailed view of the reconciliation lifecycle for every installment."
+    columns:
+      - name: transaction_id
+        description: "Unique transaction identifier."
+        tests:
+          - not_null
+      - name: installment_id
+        description: "Unique installment identifier."
+        tests:
+          - not_null
+      - name: reconciliation_status
+        description: "Status of the reconciliation process."
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Settled', 'Paid (Awaiting Settlement)', 'Late', 'Pending']
+
+
   - name: vintage_default_metrics
     description: "Analytics table observing default rates by origination cohort (vintage)."
     columns:

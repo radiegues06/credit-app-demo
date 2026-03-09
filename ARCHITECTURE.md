@@ -64,6 +64,7 @@ The consumption layer tables optimized for the BI/dashboard tool. These heavily 
 *   `collection_metrics`: Analysis of expected vs collected payments.
 *   `vintage_default_metrics`: Tracks default rates over different origination cohorts.
 *   `client_risk_metrics`: Aggregates portfolio performance (total financed, default rates) broken down by client credit risk classification.
+*   `mart_reconciliation_detail`: Detailed view mapping the full audit trail from original transaction → installments → payments → settlements.
 
 All schemas are fortified with column-level descriptions and **data integrity tests** (e.g., primary key constraints, `not_null` constraints, referential relationships mappings checking for orphans, and predefined accepted values for enumerations).
 
@@ -73,6 +74,7 @@ A fast, strictly-read-only analytical interface built with Streamlit. Features:
 *   **Portfolio Evolution**: A timeline of volume-origination using Plotly lines.
 *   **Vintage Default Curve**: A classic credit risk visualization demonstrating lifetime default behavior per cohort.
 *   **Collections + Reconciliation Monitoring**: Validating operational cashflow with expected vs. settled cash.
+*   **Transaction History Lookup**: A drill-down tool allowing users to AUDIT any specific transaction, tracking its full lifecycle (installments, split payments, and bank settlement status).
 
 ### 5. Orchestration (`run_pipeline.py`)
 A master controller script that sequentially unifies the end-to-end flow:
